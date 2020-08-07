@@ -25,7 +25,7 @@ namespace TinyWeeLinks.Api.Data
 
         public Link GetLink(string shortcut)
         {
-            return Links.First(x => x.Shortcut == shortcut);
+            return Links.FirstOrDefault(x => x.Shortcut == shortcut);
         }
 
         public void UpdateLink(Link entity)

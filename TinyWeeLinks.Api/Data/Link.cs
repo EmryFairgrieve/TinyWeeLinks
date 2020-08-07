@@ -14,7 +14,6 @@ namespace TinyWeeLinks.Api.Data
         [JsonIgnore]
         public int Id { get; set; }
         public string Shortcut { get; set; }
-        [Required]
         public string Url { get; set; }
         [Required]
         public DateTime DateTimeCreated { get; set; }
