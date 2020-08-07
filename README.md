@@ -1,3 +1,3 @@
 # TinyWeeLinks
 
-Link shortening API using .Net Core.
+Link shortening API using .Net Core
