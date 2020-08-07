@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace TinyWeeLinks.Api.Data
@@ -10,6 +11,7 @@ namespace TinyWeeLinks.Api.Data
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonIgnore]
         public int Id { get; set; }
         public string Shortcut { get; set; }
         [Required]

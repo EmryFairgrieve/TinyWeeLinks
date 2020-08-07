@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using TinyWeeLinks.Api.Data;
 using TinyWeeLinks.Api.Repositories;
@@ -17,6 +18,7 @@ namespace TinyWeeLinks.Api.Services
             var success = link != null;
             if (success)
             {
+                link.Clicks ??= new List<Click>();
                 link.Clicks.Add(click);
                 success = _linkRepository.Update(link);
             }
@@ -36,19 +38,18 @@ namespace TinyWeeLinks.Api.Services
             var link = new Link { DateTimeCreated = DateTime.UtcNow, Secret = Guid.NewGuid().ToString(), Url = url, Shortcut = shortcut };
             var success = _linkRepository.Create(link);
 
-            return success ? _linkRepository.FindByShortcut(shortcut) : null;
+            return success ? link : null;
         }
 
         public Link FindLink(string shortcut, string secret)
         {
             var link = _linkRepository.FindByShortcut(shortcut);
-            return link?.DateTimeCreated <= DateTime.UtcNow && link?.Secret == secret ? link : new Link();
+            return link?.Secret == secret ? link : null;
         }
 
         public Link FindLinkByShortcut(string shortcut)
         {
-            var link = _linkRepository.FindByShortcut(shortcut);
-            return link?.DateTimeCreated <= DateTime.UtcNow ? link : new Link();
+            return _linkRepository.FindByShortcut(shortcut);
         }
 
         private bool IsLinkValid(string url)
@@ -58,7 +59,6 @@ namespace TinyWeeLinks.Api.Services
                 var request = WebRequest.Create(url) as HttpWebRequest;
                 request.Method = "HEAD";
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                response.Close();
                 return (response.StatusCode == HttpStatusCode.OK);
             }
             catch
