@@ -4,7 +4,6 @@ using GraphQL.Types;
 using Microsoft.AspNetCore.Mvc;
 using TinyWeeLinks.Api.Models;
 using TinyWeeLinks.Api.Services;
-using TinyWeeLinks.Api.Schemas;
 using TinyWeeLinks.Api.Queries;
 using TinyWeeLinks.Api.Mutations;
 

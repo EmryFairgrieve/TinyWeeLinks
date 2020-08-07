@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace TinyWeeLinks.Api.Data
 {
@@ -10,14 +11,12 @@ namespace TinyWeeLinks.Api.Data
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Required]
         public string Shortcut { get; set; }
         [Required]
         public string Url { get; set; }
         [Required]
-        public DateTime ExpiryDate { get; set; }
-        [Required]
+        public DateTime DateTimeCreated { get; set; }
         public string Secret { get; set; }
-        public virtual ICollection<Click> Clicks { get; set; }
+        public ICollection<Click> Clicks { get; set; }
     }
 }

@@ -13,6 +13,11 @@ namespace TinyWeeLinks.Api.Data
         private DbSet<Link> Links { get; set; }
         private DbSet<Click> Clicks { get; set; }
 
+        public void AddClick(Click entity)
+        {
+            Clicks.Add(entity);
+        }
+
         public void AddLink(Link entity)
         {
             Links.Add(entity);

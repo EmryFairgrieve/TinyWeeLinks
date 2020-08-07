@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyWeeLinks.Api", "TinyWee
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C8298768-7C4E-46C9-A039-D472235297FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyWeeLinks.Tests", "TinyWeeLinks.Tests\TinyWeeLinks.Tests.csproj", "{F509B6A4-D89D-41C5-BCF2-7DDA85CE2788}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{C8298768-7C4E-46C9-A039-D472235297FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8298768-7C4E-46C9-A039-D472235297FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8298768-7C4E-46C9-A039-D472235297FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F509B6A4-D89D-41C5-BCF2-7DDA85CE2788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F509B6A4-D89D-41C5-BCF2-7DDA85CE2788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F509B6A4-D89D-41C5-BCF2-7DDA85CE2788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F509B6A4-D89D-41C5-BCF2-7DDA85CE2788}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

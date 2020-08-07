@@ -16,21 +16,38 @@ namespace TinyWeeLinks.Api.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.6");
 
+            modelBuilder.Entity("TinyWeeLinks.Api.Data.Click", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateTimeClicked")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("LinkId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LinkId");
+
+                    b.ToTable("Clicks");
+                });
+
             modelBuilder.Entity("TinyWeeLinks.Api.Data.Link", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("ExpiryDate")
+                    b.Property<DateTime>("DateTimeCreated")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Secret")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Shortcut")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
@@ -40,6 +57,13 @@ namespace TinyWeeLinks.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Links");
+                });
+
+            modelBuilder.Entity("TinyWeeLinks.Api.Data.Click", b =>
+                {
+                    b.HasOne("TinyWeeLinks.Api.Data.Link", null)
+                        .WithMany("Clicks")
+                        .HasForeignKey("LinkId");
                 });
 #pragma warning restore 612, 618
         }

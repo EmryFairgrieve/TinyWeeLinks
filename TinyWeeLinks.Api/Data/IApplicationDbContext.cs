@@ -6,6 +6,7 @@ namespace TinyWeeLinks.Api.Data
         int SaveChanges();
         void AddLink(Link entity);
         Link GetLink(string shortcut);
+        void AddClick(Click entity);
         void UpdateLink(Link entity);
     }
 }

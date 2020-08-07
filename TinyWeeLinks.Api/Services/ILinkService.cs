@@ -7,5 +7,7 @@ namespace TinyWeeLinks.Api.Services
     {
         Link CreateLink(string url);
         Link FindLink(string shortcut, string secret);
+        Link FindLinkByShortcut(string shortcut);
+        bool AddClickToLink(string shortcut, Click click);
     }
 }

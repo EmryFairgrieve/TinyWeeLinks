@@ -32,6 +32,8 @@ namespace TinyWeeLinks.Api
                 .AllowAnyMethod()
                 .AllowAnyHeader()));
 
+            services.AddScoped<IClickService, ClickService>();
+            services.AddScoped<IClickRepository, ClickRepository>();
             services.AddScoped<ILinkService, LinkService>();
             services.AddScoped<ILinkRepository, LinkRepository>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
