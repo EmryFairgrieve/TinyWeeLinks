@@ -3,9 +3,8 @@ using GraphQL;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Mvc;
 using TinyWeeLinks.Api.Models;
+using TinyWeeLinks.Api.Schemas;
 using TinyWeeLinks.Api.Services;
-using TinyWeeLinks.Api.Queries;
-using TinyWeeLinks.Api.Mutations;
 
 namespace TinyWeeLinks.Api.Controllers
 {
@@ -14,16 +13,21 @@ namespace TinyWeeLinks.Api.Controllers
     public class GraphQLController : ControllerBase
     {
         private readonly ILinkService _linkService;
+        private readonly IClickService _clickService;
 
-        public GraphQLController(ILinkService linkService) => _linkService = linkService;
+        public GraphQLController(ILinkService linkService, IClickService clickService)
+        {
+            _linkService = linkService;
+            _clickService = clickService;
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post(GraphQLQuery query)
         {
             var schema = new Schema()
             {
-                Query = new LinkQuery(_linkService),
-                Mutation = new LinkMutation(_linkService)
+                Query = new Queries(_linkService),
+                Mutation = new Mutations(_linkService, _clickService)
             };
 
             var result = await new DocumentExecuter().ExecuteAsync(_ =>

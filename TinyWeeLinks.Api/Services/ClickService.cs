@@ -28,8 +28,10 @@ namespace TinyWeeLinks.Api.Services
             if (success)
             {
                 success = _linkService.AddClickToLink(link.Shortcut, click);
+                _linkService.FindLinkByShortcut(shortcut);
             }
 
+            link.Secret = "";
             return success ? link : null;
         }
     }

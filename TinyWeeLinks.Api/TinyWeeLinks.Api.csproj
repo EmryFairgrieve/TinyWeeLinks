@@ -23,8 +23,6 @@
     <Folder Include="Schemas\" />
     <Folder Include="Data\" />
     <Folder Include="Services\" />
-    <Folder Include="Queries\" />
-    <Folder Include="Mutations\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Schemas\RouteQuery.cs" />

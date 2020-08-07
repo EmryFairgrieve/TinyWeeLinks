@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using GraphQL.Types;
-using TinyWeeLinks.Api.Data;
+﻿using GraphQL.Types;
 using TinyWeeLinks.Api.Schemas;
 using TinyWeeLinks.Api.Services;
 
-namespace TinyWeeLinks.Api.Queries
+namespace TinyWeeLinks.Api.Schemas
 {
-    public class LinkQuery : ObjectGraphType
+    public class Queries : ObjectGraphType
     {
-        public LinkQuery(ILinkService linkService)
+        public Queries(ILinkService linkService)
         {
-            Name = "LinkQuery";
-            Description = "This is where the link queries are.";
+            Name = "Query";
+            Description = "This is where the queries are.";
+
             Field<LinkType>("link",
                 arguments: new QueryArguments(
                     new QueryArgument<StringGraphType> { Name = "shortcut", Description = "The shortened URL of the link." },
