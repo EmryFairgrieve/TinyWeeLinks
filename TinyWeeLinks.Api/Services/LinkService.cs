@@ -16,6 +16,7 @@ namespace TinyWeeLinks.Api.Services
 
         public LinkInfo CreateLink(string url)
         {
+            url = url.StartsWith("http") ? url: "http://" + url;
             if (!IsLinkValid(url))
             {
                 return null;
