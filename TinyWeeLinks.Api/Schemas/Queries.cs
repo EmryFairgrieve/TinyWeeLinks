@@ -23,6 +23,12 @@ namespace TinyWeeLinks.Api.Schemas
 
                 return linkService.FindLink(shortcut, secret);
             });
+
+            Field< ListGraphType<LinkType>>("links",
+                description: "List of availble links", resolve: context =>
+                {
+                    return linkService.GetLinks();
+                });
         }
     }
 }

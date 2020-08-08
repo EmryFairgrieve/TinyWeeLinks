@@ -28,13 +28,11 @@ namespace TinyWeeLinks.Tests.Services
             var link = new Link { Shortcut = validShortcut, Id = linkId };
             _linkService.Setup(l => l.FindLinkByShortcut(validShortcut)).Returns(link);
             _clickRepository.Setup(c => c.Create(It.IsAny<Click>())).Returns(true);
-            _linkService.Setup(l => l.AddClickToLink(validShortcut, It.IsAny<Click>())).Returns(true);
 
             var response = _clickService.TrackClick(validShortcut);
 
-            _linkService.Verify(l => l.FindLinkByShortcut(validShortcut), Times.Once);
+            _linkService.Verify(l => l.FindLinkByShortcut(validShortcut), Times.Exactly(2));
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Once);
-            _linkService.Verify(l => l.AddClickToLink(validShortcut, It.IsAny<Click>()), Times.Once);
             Assert.Equal(link, response);
         }
 
@@ -48,7 +46,6 @@ namespace TinyWeeLinks.Tests.Services
 
             _linkService.Verify(l => l.FindLinkByShortcut(invalidShortcut), Times.Once);
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Never);
-            _linkService.Verify(l => l.AddClickToLink(invalidShortcut, It.IsAny<Click>()), Times.Never);
             Assert.Equal((Link) null, response);
         }
 
@@ -62,7 +59,6 @@ namespace TinyWeeLinks.Tests.Services
 
             _linkService.Verify(l => l.FindLinkByShortcut(invalidShortcut), Times.Once);
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Never);
-            _linkService.Verify(l => l.AddClickToLink(invalidShortcut, It.IsAny<Click>()), Times.Never);
             Assert.Equal((Link) null, response);
         }
 
@@ -79,26 +75,7 @@ namespace TinyWeeLinks.Tests.Services
 
             _linkService.Verify(l => l.FindLinkByShortcut(validShortcut), Times.Once);
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Once);
-            _linkService.Verify(l => l.AddClickToLink(validShortcut, It.IsAny<Click>()), Times.Never);
             Assert.Equal((Link) null, response);
-        }
-
-        [Fact]
-        public void TrackClick_DatabaseErrorLinkingClick_DoesntTrackClick()
-        {
-            var validShortcut = "shortcut";
-            var linkId = 2;
-            var link = new Link { Shortcut = validShortcut, Id = linkId };
-            _linkService.Setup(l => l.FindLinkByShortcut(validShortcut)).Returns(link);
-            _clickRepository.Setup(c => c.Create(It.IsAny<Click>())).Returns(true);
-            _linkService.Setup(l => l.AddClickToLink(validShortcut, It.IsAny<Click>())).Returns(false);
-
-            var response = _clickService.TrackClick(validShortcut);
-
-            _linkService.Verify(l => l.FindLinkByShortcut(validShortcut), Times.Once);
-            _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Once);
-            _linkService.Verify(l => l.AddClickToLink(validShortcut, It.IsAny<Click>()), Times.Once);
-            Assert.Equal((Link)null, response);
         }
     }
 }

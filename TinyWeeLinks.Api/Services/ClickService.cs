@@ -22,17 +22,9 @@ namespace TinyWeeLinks.Api.Services
             {
                 return null;
             }
-            var click = new Click { DateTimeClicked = DateTime.UtcNow };
+            var click = new Click { DateTimeClicked = DateTime.UtcNow, LinkId = link.Id };
             var success = _clickRepository.Create(click);
-
-            if (success)
-            {
-                success = _linkService.AddClickToLink(link.Shortcut, click);
-                _linkService.FindLinkByShortcut(shortcut);
-            }
-
-            link.Secret = "";
-            return success ? link : null;
+            return success ? _linkService.FindLinkByShortcut(shortcut) : null;
         }
     }
 }

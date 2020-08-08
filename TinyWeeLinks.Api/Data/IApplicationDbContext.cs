@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace TinyWeeLinks.Api.Data
 {
     public interface IApplicationDbContext
@@ -7,6 +9,6 @@ namespace TinyWeeLinks.Api.Data
         void AddLink(Link entity);
         Link GetLink(string shortcut);
         void AddClick(Click entity);
-        void UpdateLink(Link entity);
+        ICollection<Link> GetLinks();
     }
 }

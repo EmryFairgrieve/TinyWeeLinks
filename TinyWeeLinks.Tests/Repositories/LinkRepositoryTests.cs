@@ -85,37 +85,5 @@ namespace TinyWeeLinks.Tests.Repositories
             _applicationDbContext.Verify(a => a.SaveChanges(), Times.Once);
             Assert.False(result);
         }
-
-        [Fact]
-        public void Update_ValidLinkSupplied_UpdatesLink()
-        {
-            var validLink = new Link
-            {
-                Id = 4,
-                Url = "https://test.com/"
-            };
-            _applicationDbContext.Setup(a => a.UpdateLink(validLink));
-            _applicationDbContext.Setup(a => a.SaveChanges()).Returns(1);
-
-            var result = _linkRepository.Update(validLink);
-
-            _applicationDbContext.Verify(a => a.UpdateLink(validLink), Times.Once);
-            _applicationDbContext.Verify(a => a.SaveChanges(), Times.Once);
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void Update_InValidLinkSupplied_DoesntUpdateLink()
-        {
-            Link validLink = null;
-            _applicationDbContext.Setup(a => a.UpdateLink(validLink));
-            _applicationDbContext.Setup(a => a.SaveChanges()).Returns(0);
-
-            var result = _linkRepository.Update(validLink);
-
-            _applicationDbContext.Verify(a => a.UpdateLink(validLink), Times.Once);
-            _applicationDbContext.Verify(a => a.SaveChanges(), Times.Once);
-            Assert.False(result);
-        }
     }
 }

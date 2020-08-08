@@ -15,15 +15,14 @@ namespace TinyWeeLinks.Api.Controllers
         [HttpGet]
         public IActionResult Get(string shortcut, string twlSecret)
         {
-            var link = _linkService.FindLink(shortcut, twlSecret);
-            return Ok(link);
+            return shortcut == null && twlSecret == null ? Ok(_linkService.GetLinks())
+                                                            : Ok(_linkService.FindLink(shortcut, twlSecret));
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] Link link) 
         {
-            var createdLink = _linkService.CreateLink(link.Url);
-            return Ok(createdLink);
+            return Ok(_linkService.CreateLink(link.Url));
         }
     }
 }

@@ -25,10 +25,9 @@ namespace TinyWeeLinks.Api.Repositories
             return _db.GetLink(shortcut);
         }
 
-        public bool Update(Link link)
+        public ICollection<Link> GetLinks()
         {
-            _db.UpdateLink(link);
-            return Save();
+            return _db.GetLinks();
         }
 
         private bool Save()

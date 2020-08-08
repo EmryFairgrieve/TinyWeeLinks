@@ -16,8 +16,7 @@ namespace TinyWeeLinks.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Link link)
         {
-            var clicksLink = _clickService.TrackClick(link.Shortcut);
-            return Ok(clicksLink);
+            return Ok(_clickService.TrackClick(link.Shortcut));
         }
     }
 }

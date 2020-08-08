@@ -19,85 +19,21 @@ namespace TinyWeeLinks.Tests.Services
         }
 
         [Fact]
-        public void AddClickToLink_ValidShortcutAndLink_ClickAdded()
-        {
-            var shortcut = "validshortcut";
-            var click = new Click();
-            var link = new Link { Clicks = new List<Click> { click } };
-            _linkRepository.Setup(l => l.FindByShortcut(shortcut)).Returns(link);
-            _linkRepository.Setup(l => l.Update(link)).Returns(true);
-
-            var result = _linkService.AddClickToLink(shortcut, click);
-
-            Assert.True(result);
-            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
-            _linkRepository.Verify(l => l.Update(link), Times.Once);
-        }
-
-        [Fact]
-        public void AddClickToLink_InvalidShortcut_ClickNotAdded()
-        {
-            var shortcut = "invalidshortcut";
-            var click = new Click();
-            _linkRepository.Setup(l => l.FindByShortcut(shortcut)).Returns((Link) null);
-
-            var result = _linkService.AddClickToLink(shortcut, click);
-
-            Assert.False(result);
-            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
-            _linkRepository.Verify(l => l.Update(It.IsAny<Link>()), Times.Never);
-        }
-
-        [Fact]
-        public void AddClickToLink_NullShortcut_ClickNotAdded()
-        {
-            string shortcut = null;
-            var click = new Click();
-            _linkRepository.Setup(l => l.FindByShortcut(shortcut)).Returns((Link)null);
-
-            var result = _linkService.AddClickToLink(shortcut, click);
-
-            Assert.False(result);
-            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
-            _linkRepository.Verify(l => l.Update(It.IsAny<Link>()), Times.Never);
-        }
-
-        [Fact]
-        public void AddClickToLink_NullClick_ClickNotAdded()
-        {
-            var shortcut = "validshortcut";
-            Click click = null;
-            var link = new Link { Clicks = new List<Click> { click } };
-            _linkRepository.Setup(l => l.FindByShortcut(shortcut)).Returns(link);
-            _linkRepository.Setup(l => l.Update(link)).Returns(false);
-
-            var result = _linkService.AddClickToLink(shortcut, click);
-
-            Assert.False(result);
-            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
-            _linkRepository.Verify(l => l.Update(link), Times.Once);
-        }
-
-        [Fact]
-        public void AddClickToLink_DatabaseErrorOnUpdate_ClickNotAdded()
-        {
-            var shortcut = "validshortcut";
-            var click = new Click();
-            var link = new Link { Clicks = new List<Click> { click } };
-            _linkRepository.Setup(l => l.FindByShortcut(shortcut)).Returns(link);
-            _linkRepository.Setup(l => l.Update(link)).Returns(false);
-
-            var result = _linkService.AddClickToLink(shortcut, click);
-
-            Assert.False(result);
-            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
-            _linkRepository.Verify(l => l.Update(link), Times.Once);
-        }
-
-        [Fact]
         public void CreateLink_ValidAccessibleUrl_LinkCreated()
         {
             var url = "https://www.google.com/";
+            _linkRepository.Setup(l => l.Create(It.IsAny<Link>())).Returns(true);
+
+            var result = _linkService.CreateLink(url);
+
+            Assert.Equal(url, result.Url);
+            _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Once);
+        }
+
+        [Fact]
+        public void CreateLink_AnotherValidAccessibleUrl_LinkCreated()
+        {
+            var url = "google.com";
             _linkRepository.Setup(l => l.Create(It.IsAny<Link>())).Returns(true);
 
             var result = _linkService.CreateLink(url);

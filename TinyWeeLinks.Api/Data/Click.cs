@@ -13,5 +13,7 @@ namespace TinyWeeLinks.Api.Data
         public int Id { get; set; }
         [Required]
         public DateTime DateTimeClicked { get; set; }
+        [JsonIgnore]
+        public int LinkId { get; set; }
     }
 }

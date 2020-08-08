@@ -14,7 +14,7 @@ namespace TinyWeeLinks.Api.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Shortcut = table.Column<string>(nullable: true),
-                    Url = table.Column<string>(nullable: false),
+                    Url = table.Column<string>(nullable: true),
                     DateTimeCreated = table.Column<DateTime>(nullable: false),
                     Secret = table.Column<string>(nullable: true)
                 },
@@ -30,7 +30,7 @@ namespace TinyWeeLinks.Api.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DateTimeClicked = table.Column<DateTime>(nullable: false),
-                    LinkId = table.Column<int>(nullable: true)
+                    LinkId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace TinyWeeLinks.Api.Migrations
                         column: x => x.LinkId,
                         principalTable: "Links",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

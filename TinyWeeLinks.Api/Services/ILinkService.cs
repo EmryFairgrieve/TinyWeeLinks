@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using TinyWeeLinks.Api.Data;
+using TinyWeeLinks.Api.Models;
 
 namespace TinyWeeLinks.Api.Services
 {
     public interface ILinkService
     {
-        Link CreateLink(string url);
-        Link FindLink(string shortcut, string secret);
+        LinkInfo CreateLink(string url);
+        LinkInfo FindLink(string shortcut, string secret);
         Link FindLinkByShortcut(string shortcut);
-        bool AddClickToLink(string shortcut, Click click);
+        ICollection<Link> GetLinks();
     }
 }

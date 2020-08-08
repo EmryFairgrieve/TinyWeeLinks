@@ -17,7 +17,9 @@ namespace TinyWeeLinks.Api.Data
         public string Url { get; set; }
         [Required]
         public DateTime DateTimeCreated { get; set; }
+        [JsonIgnore]
         public string Secret { get; set; }
-        public ICollection<Click> Clicks { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Click> Clicks { get; set; }
     }
 }

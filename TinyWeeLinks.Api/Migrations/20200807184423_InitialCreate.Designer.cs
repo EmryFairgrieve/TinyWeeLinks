@@ -9,7 +9,7 @@ using TinyWeeLinks.Api.Data;
 namespace TinyWeeLinks.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200807133305_InitialCreate")]
+    [Migration("20200807184423_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace TinyWeeLinks.Api.Migrations
                     b.Property<DateTime>("DateTimeClicked")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("LinkId")
+                    b.Property<int>("LinkId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -53,7 +53,6 @@ namespace TinyWeeLinks.Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -63,9 +62,11 @@ namespace TinyWeeLinks.Api.Migrations
 
             modelBuilder.Entity("TinyWeeLinks.Api.Data.Click", b =>
                 {
-                    b.HasOne("TinyWeeLinks.Api.Data.Link", null)
+                    b.HasOne("TinyWeeLinks.Api.Data.Link", "Link")
                         .WithMany("Clicks")
-                        .HasForeignKey("LinkId");
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
