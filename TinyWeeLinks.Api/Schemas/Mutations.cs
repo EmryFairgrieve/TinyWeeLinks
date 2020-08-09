@@ -10,7 +10,7 @@ namespace TinyWeeLinks.Api.Schemas
             Name = "Mutation";
             Description = "This is where the mutations are.";
 
-            Field<LinkType>("createLink",
+            Field<LinkInfoType>("createLink",
                 arguments: new QueryArguments(
                     new QueryArgument<StringGraphType> { Name = "url", Description = "The URL of the link." }
                 ),

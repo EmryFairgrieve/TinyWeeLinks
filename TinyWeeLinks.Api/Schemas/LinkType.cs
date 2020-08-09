@@ -13,7 +13,6 @@ namespace TinyWeeLinks.Api.Schemas
             Field(x => x.Shortcut).Description("The shortened URL of the Link.");
             Field(x => x.Url).Description("The full URL the Link redirects to.");
             Field(x => x.DateTimeCreated).Description("The date time the Link was created.");
-            Field(x => x.Secret).Description("The secret code required to view Link statistics.");
         }
     }
 }

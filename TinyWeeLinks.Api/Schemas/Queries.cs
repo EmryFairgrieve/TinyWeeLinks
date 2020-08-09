@@ -11,7 +11,7 @@ namespace TinyWeeLinks.Api.Schemas
             Name = "Query";
             Description = "This is where the queries are.";
 
-            Field<LinkType>("link",
+            Field<LinkInfoType>("link",
                 arguments: new QueryArguments(
                     new QueryArgument<StringGraphType> { Name = "shortcut", Description = "The shortened URL of the link." },
                     new QueryArgument<StringGraphType> { Name = "twlSecret", Description = "The secret for accessing statics about the link." }

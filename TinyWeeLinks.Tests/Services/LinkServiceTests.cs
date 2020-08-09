@@ -38,7 +38,7 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.CreateLink(url);
 
-            Assert.Equal(url, result.Url);
+            Assert.Equal("https://" + url, result.Url);
             _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Once);
         }
 
