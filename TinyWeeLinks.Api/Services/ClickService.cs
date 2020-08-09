@@ -1,5 +1,6 @@
 ﻿using System;
 using TinyWeeLinks.Api.Data;
+using TinyWeeLinks.Api.Models;
 using TinyWeeLinks.Api.Repositories;
 
 namespace TinyWeeLinks.Api.Services
@@ -15,16 +16,23 @@ namespace TinyWeeLinks.Api.Services
             _clickRepository = clickRepository;
         }
 
-        public Link TrackClick(string shortcut)
+        public Result<Link> TrackClick(string shortcut)
         {
-            var link = _linkService.FindLinkByShortcut(shortcut);
-            if (link == null)
+            var linkResult = _linkService.FindLinkByShortcut(shortcut);
+            if (linkResult.Status != 200)
             {
-                return null;
+                return linkResult;
             }
-            var click = new Click { DateTimeClicked = DateTime.UtcNow, LinkId = link.Id };
+            var click = new Click { DateTimeClicked = DateTime.UtcNow, LinkId = linkResult.Data.Id };
             var success = _clickRepository.Create(click);
-            return success ? _linkService.FindLinkByShortcut(shortcut) : null;
+            if (!success)
+            {
+                return new Result<Link>(500) { ErrorMessage = "Unable to track click" };
+            }
+            else
+            {
+                return _linkService.FindLinkByShortcut(shortcut);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GraphQL.Types;
+﻿using GraphQL;
+using GraphQL.Types;
 using TinyWeeLinks.Api.Services;
 
 namespace TinyWeeLinks.Api.Schemas
@@ -17,7 +18,13 @@ namespace TinyWeeLinks.Api.Schemas
                 description: "Create a new link", resolve: context =>
                 {
                     var url = context.GetArgument<string>("url");
-                    return linkService.CreateLink(url);
+                    var result = linkService.CreateLink(url);
+                    if (!string.IsNullOrEmpty(result.ErrorMessage))
+                    {
+                        context.Errors.Add(new ExecutionError(result.ErrorMessage));
+                        return null;
+                    }
+                    return result.Data;
                 });
 
             Field<LinkType>("trackClick",
@@ -27,7 +34,13 @@ namespace TinyWeeLinks.Api.Schemas
                 description: "Track new click of a link", resolve: context =>
                 {
                     var shortcut = context.GetArgument<string>("shortcut");
-                    return clickService.TrackClick(shortcut);
+                    var result = clickService.TrackClick(shortcut);
+                    if (!string.IsNullOrEmpty(result.ErrorMessage))
+                    {
+                        context.Errors.Add(new ExecutionError(result.ErrorMessage));
+                        return null;
+                    }
+                    return result.Data;
                 });
         }
     }

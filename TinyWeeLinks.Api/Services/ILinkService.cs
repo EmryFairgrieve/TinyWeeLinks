@@ -7,9 +7,9 @@ namespace TinyWeeLinks.Api.Services
 {
     public interface ILinkService
     {
-        LinkInfo CreateLink(string url);
-        LinkInfo FindLink(string shortcut, string secret);
-        Link FindLinkByShortcut(string shortcut);
-        ICollection<Link> GetLinks();
+        Result<LinkInfo> CreateLink(string url);
+        Result<LinkInfo> FindLink(string shortcut, string secret);
+        Result<Link> FindLinkByShortcut(string shortcut);
+        Result<ICollection<Link>> GetLinks();
     }
 }

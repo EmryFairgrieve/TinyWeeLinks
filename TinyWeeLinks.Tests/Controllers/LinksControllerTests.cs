@@ -25,7 +25,7 @@ namespace TinyWeeLinks.Tests.Controllers
             var shortcut = "shortcut";
             var secret = "secret";
             var link = new LinkInfo { Shortcut = shortcut, Secret = secret, Id = 5 };
-            _linkService.Setup(l => l.FindLink(shortcut, secret)).Returns(link);
+            _linkService.Setup(l => l.FindLink(shortcut, secret)).Returns(new Result<LinkInfo>(200) { Data = link });
 
             _linksController.Get(shortcut, secret);
 
@@ -38,7 +38,7 @@ namespace TinyWeeLinks.Tests.Controllers
             var shortcut = "shortcut";
             var url = "url";
             var link = new LinkInfo { Shortcut = shortcut, Url = url, Id = 3 };
-            _linkService.Setup(l => l.CreateLink(url)).Returns(link);
+            _linkService.Setup(l => l.CreateLink(url)).Returns(new Result<LinkInfo>(200) { Data = link });
 
             _linksController.Post(link);
 

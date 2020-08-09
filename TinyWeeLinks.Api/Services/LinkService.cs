@@ -14,16 +14,22 @@ namespace TinyWeeLinks.Api.Services
 
         public LinkService(ILinkRepository linkRepository) => _linkRepository = linkRepository;
 
-        public LinkInfo CreateLink(string url)
+        public Result<LinkInfo> CreateLink(string url)
         {
+            var result = new Result<LinkInfo>(201);
+
             if (string.IsNullOrEmpty(url))
             {
-                return null;
+                result.Status = 400;
+                result.ErrorMessage = "No URL was supplied";
+                return result;
             }
             url = url.StartsWith("http") ? url: "https://" + url;
             if (!IsLinkValid(url))
             {
-                return null;
+                result.Status = 400;
+                result.ErrorMessage = "The URL supplied was not accessible";
+                return result;
             }
 
             var secret = Guid.NewGuid().ToString();
@@ -32,23 +38,81 @@ namespace TinyWeeLinks.Api.Services
             var link = new Link { DateTimeCreated = DateTime.UtcNow, Secret = Guid.NewGuid().ToString(), Url = url, Shortcut = shortcut };
             var success = _linkRepository.Create(link);
 
-            return success ? ConvertToLinkInfo(link) : null;
+            if (!success)
+            {
+                result.Status = 500;
+                result.ErrorMessage = "Unable to create new link";
+            }
+            else
+            {
+                result.Data = ConvertToLinkInfo(link);
+            }
+            return result;
         }
 
-        public LinkInfo FindLink(string shortcut, string secret)
+        public Result<LinkInfo> FindLink(string shortcut, string secret)
         {
+            var result = new Result<LinkInfo>(200);
+            if (string.IsNullOrEmpty(shortcut))
+            {
+                result.Status = 400;
+                result.ErrorMessage = "No shortcut was supplied in the URL";
+                return result;
+            }
             var link = _linkRepository.FindByShortcut(shortcut);
-            return link?.Secret == secret ? ConvertToLinkInfo(link) : null;
+            if (link == null)
+            {
+                result.Status = 400;
+                result.ErrorMessage = "Could not find link with shortcut " + shortcut;
+            }
+            else if (link?.Secret != secret)
+            {
+                result.Status = 400;
+                result.ErrorMessage = "Shortcut and secret supplied in the URL do not match";
+            }
+            else
+            {
+                result.Data = ConvertToLinkInfo(link);
+            }
+            return result;
         }
 
-        public Link FindLinkByShortcut(string shortcut)
+        public Result<Link> FindLinkByShortcut(string shortcut)
         {
-            return _linkRepository.FindByShortcut(shortcut);
+            var result = new Result<Link>(200);
+            if (string.IsNullOrEmpty(shortcut))
+            {
+                result.Status = 400;
+                result.ErrorMessage = "No shortcut was supplied in the URL";
+                return result;
+            }
+            var link = _linkRepository.FindByShortcut(shortcut);
+            if (link == null)
+            {
+                result.Status = 400;
+                result.ErrorMessage = "Could not find link with shortcut " + shortcut;
+            }
+            else
+            {
+                result.Data = link;
+            }
+            return result;
         }
 
-        public ICollection<Link> GetLinks()
+        public Result<ICollection<Link>> GetLinks()
         {
-            return _linkRepository.GetLinks();
+            var result = new Result<ICollection<Link>>(200);
+            var links = _linkRepository.GetLinks();
+            if (links == null)
+            {
+                result.Status = 500;
+                result.ErrorMessage = "Unable to find links";
+            }
+            else
+            {
+                result.Data = links;
+            }
+            return result;
         }
 
         private LinkInfo ConvertToLinkInfo(Link link)

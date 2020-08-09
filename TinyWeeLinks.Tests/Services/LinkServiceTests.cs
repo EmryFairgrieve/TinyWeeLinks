@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using TinyWeeLinks.Api.Data;
 using TinyWeeLinks.Api.Repositories;
 using TinyWeeLinks.Api.Services;
@@ -26,7 +25,7 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.CreateLink(url);
 
-            Assert.Equal(url, result.Url);
+            Assert.Equal(url, result.Data.Url);
             _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Once);
         }
 
@@ -38,7 +37,7 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.CreateLink(url);
 
-            Assert.Equal("https://" + url, result.Url);
+            Assert.Equal("https://" + url, result.Data.Url);
             _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Once);
         }
 
@@ -49,7 +48,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.CreateLink(url);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("The URL supplied was not accessible", result.ErrorMessage);
             _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Never);
         }
 
@@ -60,7 +60,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.CreateLink(url);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("The URL supplied was not accessible", result.ErrorMessage);
             _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Never);
         }
 
@@ -71,7 +72,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.CreateLink(url);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("No URL was supplied", result.ErrorMessage);
             _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Never);
         }
 
@@ -83,7 +85,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.CreateLink(url);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("Unable to create new link", result.ErrorMessage);
             _linkRepository.Verify(l => l.Create(It.IsAny<Link>()), Times.Once);
         }
 
@@ -96,7 +99,7 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLink(shortcut, secret);
 
-            Assert.Equal(shortcut, result.Shortcut);
+            Assert.Equal(shortcut, result.Data.Shortcut);
             _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
         }
 
@@ -109,7 +112,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLink(shortcut, secret);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("Could not find link with shortcut invalidshortcut", result.ErrorMessage);
             _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
         }
 
@@ -122,8 +126,9 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLink(shortcut, secret);
 
-            Assert.Null(result);
-            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
+            Assert.Null(result.Data);
+            Assert.Equal("No shortcut was supplied in the URL", result.ErrorMessage);
+            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Never);
         }
 
         [Fact]
@@ -135,7 +140,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLink(shortcut, secret);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("Shortcut and secret supplied in the URL do not match", result.ErrorMessage);
             _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
         }
 
@@ -148,7 +154,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLink(shortcut, secret);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("Shortcut and secret supplied in the URL do not match", result.ErrorMessage);
             _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
         }
 
@@ -160,7 +167,7 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLinkByShortcut(shortcut);
 
-            Assert.Equal(shortcut, result.Shortcut);
+            Assert.Equal(shortcut, result.Data.Shortcut);
             _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
         }
 
@@ -172,7 +179,8 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLinkByShortcut(shortcut);
 
-            Assert.Null(result);
+            Assert.Null(result.Data);
+            Assert.Equal("Could not find link with shortcut invalidshortcut", result.ErrorMessage);
             _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
         }
 
@@ -184,8 +192,9 @@ namespace TinyWeeLinks.Tests.Services
 
             var result = _linkService.FindLinkByShortcut(shortcut);
 
-            Assert.Null(result);
-            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Once);
+            Assert.Null(result.Data);
+            Assert.Equal("No shortcut was supplied in the URL", result.ErrorMessage);
+            _linkRepository.Verify(l => l.FindByShortcut(shortcut), Times.Never);
         }
     }
 }

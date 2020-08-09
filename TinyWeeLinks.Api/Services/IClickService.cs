@@ -1,10 +1,11 @@
 ﻿using System;
 using TinyWeeLinks.Api.Data;
+using TinyWeeLinks.Api.Models;
 
 namespace TinyWeeLinks.Api.Services
 {
     public interface IClickService
     {
-        Link TrackClick(string shortcut);
+        Result<Link> TrackClick(string shortcut);
     }
 }

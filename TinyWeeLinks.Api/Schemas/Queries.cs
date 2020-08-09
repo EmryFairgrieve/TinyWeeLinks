@@ -1,4 +1,5 @@
-﻿using GraphQL.Types;
+﻿using GraphQL;
+using GraphQL.Types;
 using TinyWeeLinks.Api.Schemas;
 using TinyWeeLinks.Api.Services;
 
@@ -21,13 +22,25 @@ namespace TinyWeeLinks.Api.Schemas
                 var shortcut = context.GetArgument<string>("shortcut");
                 var secret = context.GetArgument<string>("twlSecret");
 
-                return linkService.FindLink(shortcut, secret);
+                var result = linkService.FindLink(shortcut, secret);
+                if (!string.IsNullOrEmpty(result.ErrorMessage))
+                {
+                    context.Errors.Add(new ExecutionError(result.ErrorMessage));
+                    return null;
+                }
+                return result.Data;
             });
 
             Field< ListGraphType<LinkType>>("links",
                 description: "List of availble links", resolve: context =>
                 {
-                    return linkService.GetLinks();
+                    var result = linkService.GetLinks();
+                    if (!string.IsNullOrEmpty(result.ErrorMessage))
+                    {
+                        context.Errors.Add(new ExecutionError(result.ErrorMessage));
+                        return null;
+                    }
+                    return result.Data;
                 });
         }
     }

@@ -2,6 +2,7 @@
 using Moq;
 using TinyWeeLinks.Api.Controllers;
 using TinyWeeLinks.Api.Data;
+using TinyWeeLinks.Api.Models;
 using TinyWeeLinks.Api.Services;
 using Xunit;
 
@@ -22,7 +23,7 @@ namespace TinyWeeLinks.Tests.Controllers
         public void Post_LinkSupplied_CallsService()
         {
             var link = new Link { Shortcut = "shortcut" };
-            _clickService.Setup(c => c.TrackClick(link.Shortcut)).Returns(link);
+            _clickService.Setup(c => c.TrackClick(link.Shortcut)).Returns(new Result<Link>(200) { Data = link });
 
             _clicksController.Post(link);
 

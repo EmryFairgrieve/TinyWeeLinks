@@ -1,5 +1,6 @@
 ﻿using Moq;
 using TinyWeeLinks.Api.Data;
+using TinyWeeLinks.Api.Models;
 using TinyWeeLinks.Api.Repositories;
 using TinyWeeLinks.Api.Services;
 using Xunit;
@@ -26,40 +27,42 @@ namespace TinyWeeLinks.Tests.Services
             var validShortcut = "shortcut";
             var linkId = 2;
             var link = new Link { Shortcut = validShortcut, Id = linkId };
-            _linkService.Setup(l => l.FindLinkByShortcut(validShortcut)).Returns(link);
+            _linkService.Setup(l => l.FindLinkByShortcut(validShortcut)).Returns(new Result<Link>(200) { Data = link } );
             _clickRepository.Setup(c => c.Create(It.IsAny<Click>())).Returns(true);
 
-            var response = _clickService.TrackClick(validShortcut);
+            var result = _clickService.TrackClick(validShortcut);
 
             _linkService.Verify(l => l.FindLinkByShortcut(validShortcut), Times.Exactly(2));
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Once);
-            Assert.Equal(link, response);
+            Assert.Equal(link, result.Data);
         }
 
         [Fact]
         public void TrackClick_InvalidShortcut_DoesntTrackClick()
         {
-            var invalidShortcut = "invalid";
-            _linkService.Setup(l => l.FindLinkByShortcut(invalidShortcut)).Returns((Link) null);
+            var invalidShortcut = "invalidshortcut";
+            _linkService.Setup(l => l.FindLinkByShortcut(invalidShortcut)).Returns(new Result<Link>(400) { ErrorMessage = "Could not find link with shortcut invalidshortcut" });
 
-            var response = _clickService.TrackClick(invalidShortcut);
+            var result = _clickService.TrackClick(invalidShortcut);
 
             _linkService.Verify(l => l.FindLinkByShortcut(invalidShortcut), Times.Once);
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Never);
-            Assert.Equal((Link) null, response);
+            Assert.Null(result.Data);
+            Assert.Equal("Could not find link with shortcut invalidshortcut", result.ErrorMessage);
         }
 
         [Fact]
         public void TrackClick_Null_DoesntTrackClick()
         {
             string invalidShortcut = null;
-            _linkService.Setup(l => l.FindLinkByShortcut(invalidShortcut)).Returns((Link)null);
+            _linkService.Setup(l => l.FindLinkByShortcut(invalidShortcut)).Returns(new Result<Link>(400) { ErrorMessage = "No shortcut was supplied in the URL" });
 
-            var response = _clickService.TrackClick(invalidShortcut);
+            var result = _clickService.TrackClick(invalidShortcut);
 
             _linkService.Verify(l => l.FindLinkByShortcut(invalidShortcut), Times.Once);
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Never);
-            Assert.Equal((Link) null, response);
+            Assert.Null(result.Data);
+            Assert.Equal("No shortcut was supplied in the URL", result.ErrorMessage);
         }
 
         [Fact]
@@ -68,14 +71,15 @@ namespace TinyWeeLinks.Tests.Services
             var validShortcut = "shortcut";
             var linkId = 2;
             var link = new Link { Shortcut = validShortcut, Id = linkId };
-            _linkService.Setup(l => l.FindLinkByShortcut(validShortcut)).Returns(link);
+            _linkService.Setup(l => l.FindLinkByShortcut(validShortcut)).Returns(new Result<Link>(200) { Data = link });
             _clickRepository.Setup(c => c.Create(It.IsAny<Click>())).Returns(false);
 
-            var response = _clickService.TrackClick(validShortcut);
+            var result = _clickService.TrackClick(validShortcut);
 
             _linkService.Verify(l => l.FindLinkByShortcut(validShortcut), Times.Once);
             _clickRepository.Verify(c => c.Create(It.IsAny<Click>()), Times.Once);
-            Assert.Equal((Link) null, response);
+            Assert.Null(result.Data);
+            Assert.Equal("Unable to track click", result.ErrorMessage);
         }
     }
 }
